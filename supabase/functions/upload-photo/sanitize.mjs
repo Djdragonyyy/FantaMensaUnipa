@@ -1,5 +1,6 @@
 import jpeg from 'jpeg-js';
 import {PNG} from 'pngjs';
+import {Buffer} from 'node:buffer';
 export const MAX_INPUT=3*1024*1024;
 function dimensions(bytes){
  if(bytes[0]===137&&bytes[1]===80&&bytes[2]===78&&bytes[3]===71&&bytes[4]===13&&bytes[5]===10&&bytes[6]===26&&bytes[7]===10){const dv=new DataView(bytes.buffer,bytes.byteOffset,bytes.byteLength);return {kind:'png',width:dv.getUint32(16),height:dv.getUint32(20)};}
@@ -10,7 +11,7 @@ export function sanitizePhoto(bytes){
  try{
   if(bytes.length<32||bytes.length>MAX_INPUT)throw new Error();const dim=dimensions(bytes);
   if(dim.width<1||dim.height<1||dim.width>4000||dim.height>4000||dim.width*dim.height>12_000_000)throw new Error();
-  const raw=dim.kind==='jpeg'?jpeg.decode(bytes,{useTArray:true,maxResolutionInMP:12,maxMemoryUsageInMB:100}):PNG.sync.read(bytes,{checkCRC:true});
+  const raw=dim.kind==='jpeg'?jpeg.decode(bytes,{useTArray:true,maxResolutionInMP:12,maxMemoryUsageInMB:100}):PNG.sync.read(Buffer.from(bytes.buffer,bytes.byteOffset,bytes.byteLength),{checkCRC:true});
   const ratio=Math.min(1,1600/raw.width,1600/raw.height),width=Math.max(1,Math.round(raw.width*ratio)),height=Math.max(1,Math.round(raw.height*ratio)),data=new Uint8Array(width*height*4);
   for(let y=0;y<height;y++)for(let x=0;x<width;x++){const src=(Math.floor(y/ratio)*raw.width+Math.floor(x/ratio))*4,dst=(y*width+x)*4,alpha=raw.data[src+3]/255;for(let k=0;k<3;k++)data[dst+k]=Math.round(raw.data[src+k]*alpha+255*(1-alpha));data[dst+3]=255;}
   // Decode and re-encode pixels: EXIF/GPS/comments never copied to the new JPEG.
