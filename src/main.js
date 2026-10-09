@@ -1,4 +1,9 @@
 import './style.css';
+import {matchMenu} from './menu-matching.js';
+import {readMenuPhoto} from './ocr.js';
+let selectedPhoto=null,ocrText='',ocrResult=null,ocrBusy=false,ocrController=null;
+function clearOcr(){ocrController?.abort();selectedPhoto=null;ocrText='';ocrResult=null;}
+
 import {messages,errors} from './i18n.js';
 import {configured,client,session,catalog,rpc,demoLogin,demoClose,demoReset,photoUpload,photoUrl} from './api.js';
 import {compact,romeDate} from './domain.js';
@@ -28,7 +33,7 @@ function todayView(){
  <section class="hero"><div class="hero-copy"><p class="eyebrow">FANTAMENSA UNIPA</p><h2>${t('tagline')}</h2><p>${t('subtitle')}</p><div class="deadline"><span aria-hidden="true">◷</span> ${t('deadline')}</div></div><div class="plate" aria-hidden="true"><div class="pasta">〰<br>〰 〰<br>〰</div><span class="leaf">✦</span><span class="fork">♜</span></div></section>
  ${!user?authPanel():`<section class="card"><div class="section-title"><span class="step">01</span><div><h2>${t('pick')}</h2><p>${t('pickDesc')}</p></div></div>${choicesForm('prediction',false,p?.choices||{},lock)}<div class="form-footer"><p class="hint">${t(p?.locked?'locked':p?.revision===1?'used':cl?'closed':'remaining')}</p><button class="primary" ${lock||busy?'disabled':''}>${t(p?'edit':'send')} <span aria-hidden="true">→</span></button></div></form><p class="catalog-note">${t('example')}</p></section>`}
  ${snap?.status==='void'?`<section class="card"><h2>${t('void')}</h2></section>`:cl?`<section class="card"><h2>${t(snap.menu?'real':'pending')}</h2>${snap.menu?summaryMenu(snap.menu):`<p>${t('pendingDesc')}</p>`}${snap.discrepancy?`<p class="alert">${t('discrepancy')}</p>`:''}${snap.score?`<div class="score-total"><strong>${snap.score.total}</strong><span>/100 ${t('points')}</span></div><dl class="score-detail">${[...cats,'bonus'].map(c=>`<div><dt>${t(c)}</dt><dd>+${snap.score[c]}</dd></div>`).join('')}</dl>`:!p&&snap.menu?`<p>${t('noPrediction')}</p>`:''}</section>`:''}
- ${user&&p&&snap.day===romeDate(new Date(snap.now))&&snap?.status!=='void'?`<section class="card"><div class="section-title"><span class="step">02</span><div><h2>${t('contribute')}</h2><p>${t('contributeDesc')}</p></div></div><p class="hint">${t('contributeHint')}</p><details class="contribution"><summary>${t('sendMenu')} <span>＋</span></summary><p>${t('allAvailable')}</p>${choicesForm('contribution',true)}<label class="check"><input type="checkbox" name="confirm" required>${t('confirmContribution')}</label><button class="primary" ${busy?'disabled':''}>${t('sendMenu')}</button></form></details><form id="photo-form" class="photo-form">${field('photo','<input name="photo" type="file" accept="image/jpeg,image/png" required>')}<label class="check"><input type="checkbox" required>${t('confirmContribution')}</label><button ${busy?'disabled':''}>${t('sendPhoto')}</button></form><p class="hint">${t('photoOnly')} ${t('privacy')}</p></section>`:''}
+ ${user&&p&&snap.day===romeDate(new Date(snap.now))&&snap?.status!=='void'?`<section class="card"><div class="section-title"><span class="step">02</span><div><h2>${t('contribute')}</h2><p>${t('contributeDesc')}</p></div></div><p class="hint">${t('contributeHint')}</p><details class="contribution" ${ocrResult?'open':''}><summary>${t('sendMenu')} <span>＋</span></summary><p>${t('allAvailable')}</p>${choicesForm('contribution',true,ocrResult?.choices||{})}<label class="check"><input type="checkbox" name="confirm" required>${t('confirmContribution')}</label><button class="primary" ${busy?'disabled':''}>${t('sendMenu')}</button></form></details><div class="ocr-panel"><h3>${t('ocrTitle')}</h3><p>${t('ocrLocal')}</p>${field('photo','<input id="ocr-file" type="file" accept="image/jpeg,image/png" '+(ocrBusy?'disabled':'')+'>')}${selectedPhoto?`<p class="hint">${esc(selectedPhoto.name)}</p>`:''}<div class="button-row">${button('ocrRead','ocr-read',(!selectedPhoto||ocrBusy||busy?'disabled':'')+' class="primary"')}${ocrBusy?button('cancel','ocr-cancel'):''}</div><p id="ocr-progress" role="status" aria-live="polite">${ocrBusy?t('ocrWorking'):''}</p>${ocrResult?`${field('ocrText',`<textarea id="ocr-text" rows="8" maxlength="12000">${esc(ocrText)}</textarea>`)}${button('ocrMatch','ocr-match')}<p>${t('ocrReview')}</p>${ocrResult.unmatched.length?`<p class="hint">${t('ocrUnmatched')}</p><ul>${ocrResult.unmatched.map(line=>`<li>${esc(line)}</li>`).join('')}</ul>`:''}` : ''}</div><form id="photo-form" class="photo-form"><p>${t('ocrPhotoSeparate')}</p><label class="check"><input type="checkbox" required>${t('confirmContribution')}</label><button ${busy?'disabled':''}>${t('sendPhoto')}</button></form><p class="hint">${t('photoOnly')} ${t('privacy')}</p></section>`:''}
  ${user?`<section class="card"><h2>${t('proof')}</h2>${!cl?`<p class="hint">${t('contributionsOwn')}</p>`:''}${snap.contributions.length?snap.contributions.map(c=>`<article class="proof"><strong>${esc(c.author)}</strong> <small>${new Date(c.created_at).toLocaleString(lang,{timeZone:'Europe/Rome'})}</small>${c.menu?summaryMenu(c.menu):''}${c.photo?button('seePhoto','photo',`data-path="${esc(c.photo)}"`):c.photo_state?`<p>${t('photoPending')}</p>`:''}</article>`).join(''):`<p>${t('noProof')}</p>`}</section>`:''}
  </div><aside><section class="card rules-card"><span class="mini-icon">✦</span><h2>${t('rules')}</h2><p>${t('rulesText')}</p><div class="max"><b>100</b><span>${t('points')} / ${t('day').toLowerCase()}</span></div></section><section class="card monthly"><span class="mini-icon">↻</span><h2>${t('monthly')}</h2><p>${t('monthlyText')}</p>${button('rankings','nav','data-tab="rankings"')}</section><section class="card"><h2>${t('history')}</h2><form id="history">${field('day',`<input type="date" name="day" value="${snap?.day||''}" max="${snap?romeDate(new Date(snap.now)):''}" required>`)}<button>${t('view')}</button></form></section></aside></div>`;
 }
@@ -48,18 +53,27 @@ function errorText(e){const code=Object.keys(errors).find(k=>(e.message||'').inc
 async function run(fn,{rerender=true}={}){if(busy)return;busy=true;failure='';notice='';if(rerender)render();else{document.querySelectorAll('button').forEach(b=>b.disabled=true);document.querySelector('#status').textContent=t('loading');}try{await fn();await refresh();notice=t('saved');}catch(e){failure=errorText(e);}finally{busy=false;render();}}
 app.addEventListener('input',e=>{if(e.target.matches('[data-search]')){const options=e.target.closest('.dropdown').querySelectorAll('[data-match]');let count=0;for(const item of options){item.hidden=!item.dataset.match.includes(e.target.value.toLocaleLowerCase());if(!item.hidden)count++;}e.target.closest('.dropdown').querySelector('.no-match').hidden=count>0;}});
 app.addEventListener('change',async e=>{
+ if(e.target.id==='ocr-file'){clearOcr();selectedPhoto=e.target.files[0]||null;failure='';render();return;}
  if(e.target.id==='language'){lang=e.target.value;localStorage.setItem('fm-lang',lang);notice='';failure='';render();return;}
  if(e.target.id==='month'){month=e.target.value+'-01';await run(refresh);return;}
  if(e.target.id==='ranking-group'){activeGroup=e.target.value||null;await run(refresh);return;}
  const picker=e.target.closest('.picker');if(picker&&e.target.matches('input[type=checkbox],input[type=radio]')){let checked=[...picker.querySelectorAll('input:checked')];if(checked.length>Number(picker.dataset.limit)){e.target.checked=false;checked=checked.filter(x=>x!==e.target);}picker.querySelector('.selection').textContent=checked.length?checked.map(x=>name(x.value)).join(' · '):t('select');picker.querySelector('.counter').textContent=`${checked.length}/${Number(picker.dataset.limit)===60?'∞':picker.dataset.limit} ${t('chosen')}`;if(Number(picker.dataset.limit)===1)picker.querySelector('details').open=false;}
 });
 app.addEventListener('click',async e=>{const b=e.target.closest('[data-action]');if(!b)return;const a=b.dataset.action;
- if(a==='nav'){tab=b.dataset.tab;notice='';failure='';await run(refresh);notice='';render();return;}
+ if(a==='ocr-cancel'){ocrController?.abort();return;}
+ if(a==='ocr-match'){ocrText=document.querySelector('#ocr-text').value;ocrResult=matchMenu(ocrText,dishes);render();return;}
+ if(a==='ocr-read'){
+  if(ocrBusy||busy||!selectedPhoto)return;ocrBusy=true;failure='';notice='';ocrController=new AbortController();render();
+  try{ocrText=await readMenuPhoto(selectedPhoto,{signal:ocrController.signal,onProgress:p=>{const el=document.querySelector('#ocr-progress');if(el)el.textContent=t('ocrWorking')+(p===null?'':(' '+p+'%'));}});ocrResult=matchMenu(ocrText,dishes);if(!ocrText)notice=t('ocrEmpty');}
+  catch(err){if(err.name!=='AbortError')failure=t(['OCR_FILE','OCR_TIMEOUT'].includes(err.message)?err.message:'ocrFailed');}
+  finally{ocrBusy=false;ocrController=null;render();}return;
+ }
+ if(a==='nav'){ocrController?.abort();tab=b.dataset.tab;notice='';failure='';await run(refresh);notice='';render();return;}
  if(a==='auth-mode'){authMode=b.dataset.mode;render();return;}
  if(a==='explore'){demoLogin();await run(refresh);return;}
  if(a==='refresh'){await run(refresh);return;}
  if(a==='google')await run(async()=>{const {error}=await client.auth.signInWithOAuth({provider:'google',options:{redirectTo:location.origin}});if(error)throw error;});
- if(a==='logout')await run(async()=>{if(client){const {error}=await client.auth.signOut();if(error)throw error;}else{demoReset();}});
+ if(a==='logout')await run(async()=>{clearOcr();if(client){const {error}=await client.auth.signOut();if(error)throw error;}else{demoReset();}});
  if(a==='group-rank'){activeGroup=b.dataset.id;tab='rankings';await run(refresh);}
  if(a==='group-join')await run(()=>rpc('join_group',{gid:b.dataset.id}));
  if(a==='invite-copy')await run(()=>navigator.clipboard.writeText(`${location.origin}/?invite=${encodeURIComponent(b.dataset.token)}`));
@@ -75,11 +89,11 @@ app.addEventListener('click',async e=>{const b=e.target.closest('[data-action]')
 });
 const pendingRequests=new Map();
 function requestKey(op,payload){const key=op+JSON.stringify(payload);if(!pendingRequests.has(key))pendingRequests.set(key,crypto.randomUUID());return pendingRequests.get(key);}
-app.addEventListener('submit',async e=>{e.preventDefault();const f=e.target,data=new FormData(f),v=Object.fromEntries(data);await run(async()=>{
+app.addEventListener('submit',async e=>{e.preventDefault();if(ocrBusy)return;const f=e.target,data=new FormData(f),v=Object.fromEntries(data);await run(async()=>{
  if(f.id==='prediction'){const c=readChoices(f),rev=snap.prediction?.revision??-1;await rpc('submit_prediction',{c,expected_revision:rev,request_id:requestKey('predict',{day:snap.day,c,rev})});}
- if(f.id==='contribution'){const m=readChoices(f);await rpc('contribute',{m,request_id:requestKey('menu',{day:snap.day,m})});}
- if(f.id==='photo-form'){await photoUpload(data.get('photo'),requestKey('photo',{day:snap.day,name:data.get('photo').name,size:data.get('photo').size}));}
- if(f.id==='history'){day=v.day;tab='today';}
+ if(f.id==='contribution'){const m=readChoices(f);await rpc('contribute',{m,request_id:requestKey('menu',{day:snap.day,m})});clearOcr();}
+ if(f.id==='photo-form'){if(!selectedPhoto)throw new Error(t('OCR_FILE'));await photoUpload(selectedPhoto,requestKey('photo',{day:snap.day,name:selectedPhoto.name,size:selectedPhoto.size}));}
+ if(f.id==='history'){clearOcr();day=v.day;tab='today';}
  if(f.id==='create-group')await rpc('create_group',{n:v.name,priv:v.private==='true',request_id:requestKey('group',v)});
  if(f.id==='join-group'){await rpc('join_group',{token:v.token.trim().split('invite=').pop()});localStorage.removeItem('fm-invite');}
  if(f.classList.contains('group-name'))await rpc('manage_group',{gid:f.dataset.id,n:v.name});
@@ -95,4 +109,4 @@ app.addEventListener('submit',async e=>{e.preventDefault();const f=e.target,data
 if(client)client.auth.onAuthStateChange((event)=>{if(event==='PASSWORD_RECOVERY'){recovery=true;tab='profile';}setTimeout(async()=>{try{await refresh();render();}catch(e){failure=errorText(e);render();}},0);});
 render();
 try{dishes=await catalog();await refresh();if(localStorage.getItem('fm-invite'))tab='groups';render();}catch(e){failure=errorText(e);render();}
-setInterval(async()=>{if(!busy&&snap&&!snap.closed){try{const updated=await rpc('snapshot',{d:day});if(updated.closed||updated.day!==snap.day){snap=updated;render();}}catch{/* existing page remains usable; next explicit action displays errors */}}},15000);
+setInterval(async()=>{if(!busy&&!ocrBusy&&snap&&!snap.closed){try{const updated=await rpc('snapshot',{d:day});if(updated.closed||updated.day!==snap.day){snap=updated;render();}}catch{/* existing page remains usable; next explicit action displays errors */}}},15000);

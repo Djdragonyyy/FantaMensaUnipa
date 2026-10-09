@@ -89,3 +89,7 @@ git push origin main
 Su Windows, se schannel fallisce: `git -c http.sslBackend=openssl push origin main`. Non usare `--force`. Se il remoto avanza, `git fetch origin`, integra/revisiona i nuovi commit e riesegui i test prima del push. Non inserire credenziali nei log o nella cronologia.
 
 Prima dell'apertura reale esegui le verifiche esterne in VERIFICATION.md. Selezionare piani Free evita acquisti automatici; quote, disponibilità e termini possono cambiare. Esegui backup manuali del database: il piano Free non include backup automatici.
+
+## Asset OCR su Cloudflare
+
+Il comando `pnpm build` genera worker, motori WASM e modello italiano in `public/ocr` e li include in `dist/ocr`. Distribuire tutta `dist`, inclusi `_headers` e `ocr/`. La CSP permette `wasm-unsafe-eval` e worker dello stesso origin; nessuna CDN OCR esterna. Non disabilitare il download degli asset `.wasm.js` o `.traineddata.gz`. Ogni asset resta sotto 25 MiB. Verificare sul dominio pubblico una foto di prova e il caricamento del modello. OCR non richiede nuove chiavi o servizi a pagamento.

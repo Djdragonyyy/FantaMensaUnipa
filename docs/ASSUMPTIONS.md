@@ -1,7 +1,7 @@
 # Assunzioni e limiti
 
 - Solo Santi Romano, solo pranzo; nessun calendario automatico di chiusure. Una giornata priva di menu resta in attesa; un admin può annullarla indicando un motivo. Non si finge che la mensa sia aperta ogni giorno.
-- Scadenza 13:30 mantenuta anche quando il menu è reperibile prima. Nessun crawler, OCR o API AI.
+- Scadenza 13:30 mantenuta anche quando il menu è reperibile prima. Nessun crawler o API AI a pagamento. OCR locale con proposte da verificare manualmente prima dell’invio; nessuna pubblicazione automatica del testo estratto.
 - Catalogo iniziale di esempio. Gli alias servono alla ricerca; ogni selezione salva l'ID del piatto. Il menu usa gli stessi ID ma è un'entità separata. Modificare traduzioni/alias non ricalcola identità; non riutilizzare ID per piatti diversi.
 - Menu completo = almeno un piatto in tutte le quattro categorie. Non richiede esattamente tre secondi reali: i tre secondi sono obbligatori solo nel pronostico. L'utente attesta di avere selezionato tutti i disponibili; nessun software può verificare questa dichiarazione senza moderazione. La politica primo contributo completo può accettare errori intenzionali: discrepanze, segnalazioni, audit e correzioni admin sono il rimedio previsto.
 - Primo menu completo accettato anche prima della chiusura, ma invisibile agli altri fino alla scadenza. Calcolo classifica sempre subordinato a chiusura e giornata risolta. Un admin non deve distribuire informazioni privilegiate.

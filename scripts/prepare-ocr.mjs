@@ -1,0 +1,14 @@
+import {createRequire} from 'node:module';
+import {dirname,join} from 'node:path';
+import {mkdirSync,copyFileSync,readdirSync} from 'node:fs';
+const require=createRequire(import.meta.url);
+const engine=dirname(require.resolve('tesseract.js/package.json'));
+const core=dirname(createRequire(join(engine,'package.json')).resolve('tesseract.js-core/package.json'));
+const data=dirname(require.resolve('@tesseract.js-data/ita/package.json'));
+mkdirSync('public/ocr/core',{recursive:true});
+copyFileSync(join(engine,'dist/worker.min.js'),'public/ocr/worker.min.js');
+for(const file of readdirSync(core).filter(f=>/^tesseract-core.*\.wasm(\.js)?$/.test(f)))copyFileSync(join(core,file),join('public/ocr/core',file));
+copyFileSync(join(data,'4.0.0_best_int/ita.traineddata.gz'),'public/ocr/ita.traineddata.gz');
+copyFileSync(join(engine,'LICENSE.md'),'public/ocr/LICENSE-tesseract.txt');
+copyFileSync(join(core,'LICENSE'),'public/ocr/LICENSE-core.txt');
+console.log('OCR worker, WASM engines and Italian model copied to public/ocr (same-origin).');

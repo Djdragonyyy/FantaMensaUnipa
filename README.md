@@ -18,7 +18,7 @@ pnpm build
 pnpm preview
 ```
 
-Senza `.env.local` parte una **demo esplicitamente etichettata**, con dati nel browser e chiusura simulabile dal Profilo. Non registra account, non carica foto reali e non sostituisce il backend. Il controllo dell'orario della demo non è utilizzato dal gioco reale.
+Senza `.env.local` parte una **demo esplicitamente etichettata**, con dati nel browser e chiusura simulabile dal Profilo. Non registra account, legge le foto localmente ma non le carica sul server e non sostituisce il backend. Il controllo dell'orario della demo non è utilizzato dal gioco reale.
 
 Per il gioco reale, copia `.env.example` in `.env.local` e configura Supabase seguendo [DEPLOYMENT](docs/DEPLOYMENT.md). Le variabili VITE sono pubbliche: contengono soltanto URL e chiave publishable/anon, mai una chiave service role. Ricostruisci il frontend dopo ogni cambio di configurazione.
 
@@ -42,7 +42,7 @@ Invii e contributi bloccano la riga della giornata. L'invio usa anche la revisio
 
 I punteggi sono derivati dai pronostici e dal menu, senza contatori incrementali: ricalcolare non duplica punti e una correzione aggiorna immediatamente entrambe le classifiche. Il mese dipende dalla data giocata, non dall'arrivo del risultato. I gruppi congelano i pesi alla prima partecipazione; nuove regole valgono il mese seguente. Per gli ingressi conta il giorno di ingresso; per le rimozioni si conserva un intervallo storico.
 
-L'Edge Function valida JWT tramite `auth.getUser`, CORS e dimensione effettiva del corpo, decodifica JPEG/PNG, verifica dimensioni e riscrive solo pixel JPEG senza EXIF/GPS. Input massimo 3 MiB, 4000 px per lato e 12 MP; output massimo 1600 px e 1 MiB. Storage privato: **neppure l'autore può generare un URL firmato prima delle 13:30**. Dopo la chiusura sono consentiti URL di 60 secondi agli utenti autenticati. Non c'è OCR/AI. Retention prevista 30 giorni con job server separato.
+L'Edge Function valida JWT tramite `auth.getUser`, CORS e dimensione effettiva del corpo, decodifica JPEG/PNG, verifica dimensioni e riscrive solo pixel JPEG senza EXIF/GPS. Input massimo 3 MiB, 4000 px per lato e 12 MP; output massimo 1600 px e 1 MiB. Storage privato: **neppure l'autore può generare un URL firmato prima delle 13:30**. Dopo la chiusura sono consentiti URL di 60 secondi agli utenti autenticati. È disponibile OCR locale con Tesseract.js: foto → testo modificabile → proposte nel catalogo → conferma umana del menu strutturato. La lettura non carica la foto, non blocca il pronostico e non assegna punti. L'upload come prova resta separato. Retention prevista 30 giorni con job server separato.
 
 ## Regole
 
@@ -59,3 +59,9 @@ Gruppi standard: primo 15, ogni secondo 15, contorno 15, succhino 10, bonus 15 =
 - [Come contribuire](CONTRIBUTING.md)
 
 Le migrazioni sono in `supabase/migrations`. `supabase/seed.sql` contiene un **catalogo candidato di esempio**, non il menu odierno e non dati di utenti. La demo del browser è separata. Licenza MIT.
+
+## Lettura del menu da foto
+
+Dopo il pronostico, seleziona una foto nella sezione contributi e premi **Estrai testo dalla foto**. Correggi il testo e premi **Aggiorna i piatti suggeriti**, poi controlla e completa tutte le categorie nel modulo del menu e conferma l’invio. I nomi assenti dal catalogo richiedono selezione manuale o aggiornamento del catalogo da parte dell’amministratore. Foto sfocate, ruotate o con testo piccolo possono produrre errori.
+
+Il riconoscimento è gratuito e avviene nel browser, anche in demo. Worker, motore WASM e modello italiano sono serviti dallo stesso sito: nessuna foto viene trasmessa a servizi OCR. `pnpm dev`, `pnpm test` e `pnpm build` preparano automaticamente gli asset da dipendenze versionate; `public/ocr` è generata e non va committata. Il primo utilizzo scarica alcuni MB e può richiedere tempo su telefoni lenti. Massimo 3 MiB, 4000 px per lato e 12 MP; annullamento e timeout di 90 secondi disponibili.

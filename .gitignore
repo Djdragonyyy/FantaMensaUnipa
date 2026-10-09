@@ -6,3 +6,5 @@ dist/
 .sites-local/
 test-results/
 *.zip
+
+public/ocr/

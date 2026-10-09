@@ -4,7 +4,7 @@ Eseguita localmente il 9 ottobre 2026 su Windows, Node 24.19.0.
 
 ## Automazione
 
-`pnpm test`: 17 test passati, zero fallimenti. Include una suite PostgreSQL reale via PGlite (WASM) con migrazioni di produzione e schema Auth/Storage simulato:
+`pnpm test`: 21 test passati, zero fallimenti. Include una suite PostgreSQL reale via PGlite (WASM) con migrazioni di produzione e schema Auth/Storage simulato:
 
 - Chiusura server alle 13:30:00, inverno/estate e giorni di cambio ora.
 - Completezza, tre secondi distinti, unico pronostico e unica modifica.
@@ -17,6 +17,7 @@ Eseguita localmente il 9 ottobre 2026 su Windows, Node 24.19.0.
 - Pesi generale/gruppi, ricalcolo senza duplicazioni, bonus massimo 100 e entrambi i succhini.
 - Versioni mensili congelate, ingresso tardivo, cambio mese, risultati storici e annullamento.
 - AAL1 respinto, AAL2 amministratore accettato, audit delle correzioni.
+- OCR italiano reale su immagine di test; associazione al catalogo tramite nomi/alias, categorie, deduplicazione, inattivi, piatti sconosciuti o esauriti e rifiuto file troppo grandi.
 - Decodifica immagini, rimozione metadati JPEG, PNG convertito, file contraffatti, limiti di peso/dimensione.
 
 `pnpm check`: sintassi JavaScript, parità delle chiavi IT/EN e separazione delle chiavi privilegiate dal frontend. Controllo sintattico TypeScript Edge con Node strip-types. `pnpm build`: build Vite di produzione riuscita. Workflow CI incluso.
@@ -34,6 +35,7 @@ Verificata demo tramite browser Codex:
 - Creazione gruppo privato su desktop.
 - Passaggio italiano/inglese con conservazione degli ID e della preferenza.
 - Nessun overflow orizzontale rilevato: scrollWidth ≤ innerWidth ai due viewport.
+- Estrazione OCR nel browser da PNG di test, correzione testo, aggiornamento piatti e segnalazione righe sconosciute; IT/EN e mobile. Nessuna immagine reale della mensa è stata fornita: l’accuratezza sul cartello reale resta da verificare.
 - Screenshot di consegna nelle directory outputs, distinti dal codice.
 
 I controlli sono manuali attraverso UI; nessuna registrazione/email/OAuth reale è stata simulata come verifica esterna riuscita.

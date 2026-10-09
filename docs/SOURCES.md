@@ -26,3 +26,11 @@ Le quote sono una fotografia della documentazione, non una garanzia di gratuità
 - [Pages custom domains](https://developers.cloudflare.com/pages/configuration/custom-domains/): per sottodomini esterni serve CNAME verso il nome pages.dev. **Inferenza dalle due fonti**: DuckDNS non offre la configurazione richiesta per Pages; usare HTTPS pages.dev.
 
 Le fonti ERSU sono usate per contesto/localizzazione, non per un menu del giorno. Nessun menu pubblico è importato automaticamente nel catalogo dei candidati o nei risultati.
+
+## OCR
+
+- Tesseract.js 7.0.0, Apache-2.0: https://github.com/naptha/tesseract.js
+- Configurazione locale e scelta automatica dei motori: https://github.com/naptha/tesseract.js/blob/master/docs/local-installation.md
+- Modello italiano `@tesseract.js-data/ita` 1.0.0: https://github.com/naptha/tessdata
+
+Le licenze Tesseract.js e del core sono copiate insieme agli asset. La licenza MIT del progetto non sostituisce le licenze delle dipendenze.
