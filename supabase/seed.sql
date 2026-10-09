@@ -1,0 +1,21 @@
+-- EXAMPLE candidate catalog, not today's actual menu. Stable IDs never translated.
+insert into public.dishes(id,category,it,en,aliases) values
+('pasta-pomodoro','first','Pasta al pomodoro','Pasta with tomato sauce','{"pasta al sugo"}'),
+('pasta-pesto','first','Pasta al pesto','Pasta with pesto','{}'),
+('pasta-norma','first','Pasta alla Norma','Pasta alla Norma','{"pasta con melanzane"}'),
+('riso-verdure','first','Riso con verdure','Rice with vegetables','{"risotto alle verdure"}'),
+('pasta-legumi','first','Pasta e legumi','Pasta and pulses','{}'),
+('pollo-arrosto','main','Pollo arrosto','Roast chicken','{"pollo al forno"}'),
+('cotoletta','main','Cotoletta di pollo','Breaded chicken cutlet','{"cotoletta pollo"}'),
+('pesce-forno','main','Pesce al forno','Baked fish','{}'),
+('frittata','main','Frittata','Omelette','{}'),
+('polpette','main','Polpette al sugo','Meatballs in tomato sauce','{"polpette"}'),
+('legumi','main','Legumi in umido','Stewed pulses','{}'),
+('formaggio','main','Formaggio','Cheese','{}'),
+('patate','side','Patate al forno','Roast potatoes','{"patate arrosto"}'),
+('insalata','side','Insalata mista','Mixed salad','{"insalata"}'),
+('carote','side','Carote lesse','Boiled carrots','{}'),
+('spinaci','side','Spinaci all’olio','Spinach with olive oil','{"spinaci"}'),
+('zucchine','side','Zucchine saltate','Sautéed courgettes','{}'),
+('pesca','juice','Pesca','Peach','{"succo pesca"}'),
+('pera','juice','Pera','Pear','{"succo pera"}') on conflict do nothing;
