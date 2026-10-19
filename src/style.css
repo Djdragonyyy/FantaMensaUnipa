@@ -5,3 +5,5 @@
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 
 .ocr-panel{margin-top:24px;padding:20px;border:1px solid var(--line,#ddd);border-radius:16px;background:#fafbf8}.ocr-panel textarea{width:100%;resize:vertical}.ocr-panel li{overflow-wrap:anywhere}.ocr-panel .button-row{flex-wrap:wrap}#ocr-progress:empty{display:none}
+
+.group-menu{border-top:1px solid #e4e8e3;margin:20px 0;padding-top:16px}.group-date{display:flex;gap:12px;align-items:end;flex-wrap:wrap}.group-date .field{flex:1}.owner-menu .two-col{align-items:start}.dish-suggestions{max-height:220px;overflow:auto;flex-wrap:wrap;margin:12px 0}.dish-suggestions button{white-space:normal;text-align:left}.owner-menu textarea{width:100%;resize:vertical}

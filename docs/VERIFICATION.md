@@ -54,3 +54,9 @@ Mancano credenziali/accesso Supabase, Google OAuth, SMTP e Cloudflare. Queste op
 8. Configurare env, compilare e pubblicare la build reale su Pages; il banner demo deve scomparire. Verificare HTTPS, CSP e redirect OAuth sul dominio effettivo.
 
 Il codice e la demo sono verificati localmente. La readiness del servizio reale richiede queste prove esterne: non è dichiarata completata senza accessi.
+
+## Aggiornamento 19 ottobre 2026
+
+27 test locali passati (suite precedenti più 5 casi della nuova migrazione e relativo contenitore). Nuova suite: conversione dei gruppi pubblici, creazione privata idempotente, accesso su invito, proprietario e membri, isolamento di piatti/menu fra gruppi, correzioni dopo la scadenza, conflitto di revisione, revoca accesso dopo rimozione membro, dati malformati e assenza di scritture parziali, accesso diretto alle tabelle negato, classifica riservata ad admin AAL2 e blocco dei precedenti endpoint interni. Check sintattico/traduzioni e build Vite riusciti.
+
+La verifica visiva di questo aggiornamento non è stata completata: Computer Use si è fermato perché non ha potuto determinare con sicurezza l’URL del browser Windows. Le verifiche UI riportate sopra riguardano la versione precedente. Nessun test sul progetto Supabase remoto e nessuna pubblicazione di questo aggiornamento sono stati eseguiti.

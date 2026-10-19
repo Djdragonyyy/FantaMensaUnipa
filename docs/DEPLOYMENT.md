@@ -93,3 +93,9 @@ Prima dell'apertura reale esegui le verifiche esterne in VERIFICATION.md. Selezi
 ## Asset OCR su Cloudflare
 
 Il comando `pnpm build` genera worker, motori WASM e modello italiano in `public/ocr` e li include in `dist/ocr`. Distribuire tutta `dist`, inclusi `_headers` e `ocr/`. La CSP permette `wasm-unsafe-eval` e worker dello stesso origin; nessuna CDN OCR esterna. Non disabilitare il download degli asset `.wasm.js` o `.traineddata.gz`. Ogni asset resta sotto 25 MiB. Verificare sul dominio pubblico una foto di prova e il caricamento del modello. OCR non richiede nuove chiavi o servizi a pagamento.
+
+## Aggiornamento gruppi privati (19 ottobre 2026)
+
+Applicare in ordine tutte le migrazioni, inclusa `003_private_groups.sql`, prima di distribuire questo frontend. La migrazione rende privati i gruppi esistenti, impedisce nuovi gruppi pubblici e riserva leaderboard e pronostici rivelati agli admin con AAL2. Nuove tabelle `group_menus` e `group_dishes`: nessun accesso diretto dal client, letture tramite RPC solo ai membri attuali, scritture solo al proprietario. Le correzioni hanno revisioni per evitare sovrascritture e audit. I proprietari possono correggere menu anche dopo le 13:30; la scadenza della simulazione non cambia. I piatti nuovi restano nel catalogo del gruppo e non modificano quello generale.
+
+Il menu del gruppo è consultabile dai suoi membri per la giornata selezionata. Le classifiche WIP continuano a usare i dati del precedente gioco generale: non sono un motore di punteggio dei nuovi menu privati. Verificare le policy su Supabase reale prima dell’apertura.

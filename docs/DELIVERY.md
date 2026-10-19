@@ -19,3 +19,9 @@ Mancano configurazioni reali Supabase, Google OAuth, SMTP, Edge Function e hosti
 Per l'avvio: Node 24, pnpm 11, `pnpm install --frozen-lockfile`, `pnpm dev`. Per attivare il backend seguire DEPLOYMENT.md e poi eseguire le prove esterne indicate in VERIFICATION.md prima di aprire al pubblico. Non è dichiarata readiness di produzione dei servizi esterni senza queste verifiche.
 
 Aggiornamento OCR: riconoscimento gratuito nel browser, asset locali inclusi nella build, testo modificabile, proposte da catalogo e conferma esplicita. Invio foto come prova separato. La build OCR non è stata pubblicata sul servizio esterno.
+
+## 19 ottobre 2026 — gruppi privati
+
+Menu del gruppo gestiti dal creatore, piatti personalizzati riutilizzabili e date selezionabili; correzioni senza limite di orario, revisioni e audit. Consultazione riservata ai membri; rimozione membro revoca accesso. Solo gruppi privati, ingresso su invito. Classifica nascosta agli utenti e RPC riservate agli amministratori con MFA, con indicazione WIP. Simulazione locale conservata alle 13:30. 27 test e build passati; verifica visiva non completata per arresto Computer Use.
+
+Remote aggiunto: `djdragonyyy` → `https://github.com/Djdragonyyy/FantaMensaUnipa.git`. Il push è stato tentato ma fallisce per credenziali: Git Credential Manager non riesce a usare wincredman e Git non può richiedere lo username in questa sessione. Da un terminale autenticato eseguire `git push djdragonyyy main`, senza force. Non è necessario collegare GitHub a ChatGPT.

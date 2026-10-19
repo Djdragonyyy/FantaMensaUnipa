@@ -1,5 +1,9 @@
 # FantaMensa UniPa
 
+**Aggiornamento 19 ottobre 2026:** il flusso principale usa gruppi privati su invito. Il creatore gestisce menu giornalieri e piatti personalizzati del proprio gruppo; i membri possono consultare il menu. La classifica è in lavorazione e accessibile soltanto ad amministratori con MFA. Il precedente gioco generale resta nella simulazione locale, con scadenza alle **13:30 Europe/Rome**.
+
+Per aggiornare un backend esistente applicare anche `supabase/migrations/003_private_groups.sql`. I gruppi precedentemente pubblici diventano privati; i membri già iscritti restano membri. I menu personali dei gruppi sono separati dai menu e dai punteggi del precedente gioco generale. La classifica admin è una vista storica in lavorazione: non calcola punteggi dai nuovi menu personali.
+
 Il pranzo diventa un gioco. Progetto indipendente e open source per indovinare il pranzo della mensa **Santi Romano**, viale delle Scienze, Palermo. Non è un servizio ufficiale di UniPa o ERSU. Pizza e panini sono esclusi.
 
 Il README originario («sito per la fantamensa di unipa!») è conservato nel commit iniziale.
