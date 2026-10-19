@@ -69,3 +69,13 @@ Le migrazioni sono in `supabase/migrations`. `supabase/seed.sql` contiene un **c
 Dopo il pronostico, seleziona una foto nella sezione contributi e premi **Estrai testo dalla foto**. Correggi il testo e premi **Aggiorna i piatti suggeriti**, poi controlla e completa tutte le categorie nel modulo del menu e conferma l’invio. I nomi assenti dal catalogo richiedono selezione manuale o aggiornamento del catalogo da parte dell’amministratore. Foto sfocate, ruotate o con testo piccolo possono produrre errori.
 
 Il riconoscimento è gratuito e avviene nel browser, anche in demo. Worker, motore WASM e modello italiano sono serviti dallo stesso sito: nessuna foto viene trasmessa a servizi OCR. `pnpm dev`, `pnpm test` e `pnpm build` preparano automaticamente gli asset da dipendenze versionate; `public/ocr` è generata e non va committata. Il primo utilizzo scarica alcuni MB e può richiedere tempo su telefoni lenti. Massimo 3 MiB, 4000 px per lato e 12 MP; annullamento e timeout di 90 secondi disponibili.
+
+## FantaEventi dei gruppi privati
+
+Ogni membro può giocare sugli eventi della giornata entro le **13:30 Europe/Rome**: caduta dei piatti; «Permesso, Permesso!!»; «Sgomberare!!»; «Ragazzi chi ha finito levi i vassoi!!»; richiesta personale del formaggio con toggle. È richiesta almeno una selezione e si può modificare la giocata una sola volta. I pronostici di altri membri non vengono esposti.
+
+Quote iniziali modificabili dal creatore: piatti ×2,5; permesso ×1,5; sgomberare ×3,0; vassoi ×2,0; formaggio ×1,8. Ogni evento scelto e avvenuto vale **10 × quota punti virtuali**. Errori e selezioni disattivate valgono zero: nessuna puntata in denaro. Le quote sono memorizzate in centesimi interi, con incrementi di 0,1 fra 1,0 e 10,0, e sono congelate per gruppo/giorno dalla prima giocata. Le successive modifiche del creatore valgono solo per giornate non iniziate.
+
+Dopo la chiusura il creatore conferma i quattro eventi comuni e, separatamente, i partecipanti a cui è stato chiesto il formaggio. Le caselle non selezionate significano evento non avvenuto; è richiesta una conferma esplicita prima di salvare. Gli esiti sono correggibili con audit e controllo della revisione; i punti vengono ricalcolati senza sommare due volte. Ogni membro vede solo il proprio riepilogo punti; la classifica continua a essere WIP riservata agli admin e non incorpora ancora questi punti eventi.
+
+La simulazione locale supporta lo stesso flusso: giocare prima della chiusura simulata, poi usare Profilo → Simula chiusura delle 13:30 e confermare gli eventi dal gruppo. Applicare anche la migrazione **004_canteen_events.sql** prima di distribuire il frontend aggiornato su Supabase reale.

@@ -99,3 +99,7 @@ Il comando `pnpm build` genera worker, motori WASM e modello italiano in `public
 Applicare in ordine tutte le migrazioni, inclusa `003_private_groups.sql`, prima di distribuire questo frontend. La migrazione rende privati i gruppi esistenti, impedisce nuovi gruppi pubblici e riserva leaderboard e pronostici rivelati agli admin con AAL2. Nuove tabelle `group_menus` e `group_dishes`: nessun accesso diretto dal client, letture tramite RPC solo ai membri attuali, scritture solo al proprietario. Le correzioni hanno revisioni per evitare sovrascritture e audit. I proprietari possono correggere menu anche dopo le 13:30; la scadenza della simulazione non cambia. I piatti nuovi restano nel catalogo del gruppo e non modificano quello generale.
 
 Il menu del gruppo è consultabile dai suoi membri per la giornata selezionata. Le classifiche WIP continuano a usare i dati del precedente gioco generale: non sono un motore di punteggio dei nuovi menu privati. Verificare le policy su Supabase reale prima dell’apertura.
+
+## FantaEventi
+
+Applicare `004_canteen_events.sql` dopo `003_private_groups.sql`. Tabelle `group_event_rules`, `group_event_days`, `group_event_tickets` senza accesso diretto client. RPC con controllo membri/proprietario e scadenza server. Quote congelate su riga giornaliera al primo invio, risultato personale del formaggio separato per utente. La classifica admin esistente non incorpora ancora i punti eventi. Nessuna nuova dipendenza o chiave richiesta.
