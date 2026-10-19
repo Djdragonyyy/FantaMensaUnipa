@@ -65,7 +65,7 @@ Sostituisci i segnaposto con UUID reali. Nessuna RPC pubblica assegna ruoli; i m
 
 ## 6. Cloudflare Pages Free (frontend pubblico)
 
-Connetti il repository GitHub dal dashboard Pages, seleziona branch `main`, comando build `pnpm build`, directory `dist`, Node.js 24. Aggiungi solo `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` e site key CAPTCHA alle variabili di build. Il lockfile è incluso. Configura anche i limiti Auth e CORS Edge sull'URL generato `https://NOME.pages.dev`.
+Connetti il repository GitHub dal dashboard Pages, seleziona branch `main`, comando build `pnpm build`, directory `dist`, Node.js 24 e `PNPM_VERSION=11.25.0`. Aggiungi solo `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` e site key CAPTCHA alle variabili di build. Il lockfile è incluso. Configura anche i limiti Auth e CORS Edge sull'URL generato `https://NOME.pages.dev`.
 
 Alternativa: `pnpm build`, poi Direct Upload di `dist` dal dashboard. HTTPS sul sottodominio provider. Non pubblicare la demo come gioco reale: in produzione deve sparire il banner di esplorazione. Le intestazioni di sicurezza in `public/_headers` sono applicate da Pages. Verificale dal browser dopo il deploy.
 
@@ -79,14 +79,14 @@ Con hosting proprio su IP e un certificato Let's Encrypt, DuckDNS può essere us
 
 ## 8. Git e apertura al pubblico
 
-Il repository originale è `https://github.com/albertofiocco24-star/FantaMensaUnipa.git`, branch main. Per push occorre un account con accesso in scrittura. Usa Git Credential Manager o SSH; non incollare token nei file o negli URL remoti:
+Il repository originale è `https://github.com/Djdragonyyy/FantaMensaUnipa.git`, branch main. Per push occorre un account con accesso in scrittura. Usa Git Credential Manager o SSH; non incollare token nei file o negli URL remoti:
 
 ```sh
 git remote -v
-git push origin main
+git push djdragonyyy main
 ```
 
-Su Windows, se schannel fallisce: `git -c http.sslBackend=openssl push origin main`. Non usare `--force`. Se il remoto avanza, `git fetch origin`, integra/revisiona i nuovi commit e riesegui i test prima del push. Non inserire credenziali nei log o nella cronologia.
+Su Windows, se schannel fallisce: `git -c http.sslBackend=openssl push djdragonyyy main`. Non usare `--force`. Se il remoto avanza, `git fetch origin`, integra/revisiona i nuovi commit e riesegui i test prima del push. Non inserire credenziali nei log o nella cronologia.
 
 Prima dell'apertura reale esegui le verifiche esterne in VERIFICATION.md. Selezionare piani Free evita acquisti automatici; quote, disponibilità e termini possono cambiare. Esegui backup manuali del database: il piano Free non include backup automatici.
 
@@ -103,3 +103,7 @@ Il menu del gruppo è consultabile dai suoi membri per la giornata selezionata. 
 ## FantaEventi
 
 Applicare `004_canteen_events.sql` dopo `003_private_groups.sql`. Tabelle `group_event_rules`, `group_event_days`, `group_event_tickets` senza accesso diretto client. RPC con controllo membri/proprietario e scadenza server. Quote congelate su riga giornaliera al primo invio, risultato personale del formaggio separato per utente. La classifica admin esistente non incorpora ancora i punti eventi. Nessuna nuova dipendenza o chiave richiesta.
+
+## Prima apertura: stato aggiornato
+
+Seguire LAUNCH-2026-10-19.md e completare PRIVACY-DRAFT.md. Tenere `VITE_PUBLIC_ACCESS_ENABLED=false` e le registrazioni disattivate nel dashboard Supabase fino alle verifiche finali. La migrazione 005 limita le foto legacy a proprietario/admin MFA e impedisce che lo snapshot pubblico mostri prove di altre persone. La pagina pubblica privacy descrive il servizio in configurazione: non sostituisce l’informativa definitiva.

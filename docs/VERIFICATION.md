@@ -64,3 +64,7 @@ La verifica visiva di questo aggiornamento non è stata completata: Computer Use
 ## Verifica FantaEventi — 19 ottobre 2026
 
 34 test passati; check sintassi, parità IT/EN e build riusciti. Nuovi casi: calcolo punti con quote e formaggio personale, input e quote invalidi, accessi membri/proprietario, congelamento quote, isolamento gruppi, nessuna esposizione dei pronostici altrui, unica modifica e revisione, scadenza esatta alle 13:30, date diverse da oggi, conferma dopo chiusura, completezza degli esiti personali, correzione senza accumulo, tabelle/helper non accessibili e revoca accesso. Test SQL su PGlite con migrazioni di produzione. Verifica visiva e integrazione su Supabase remoto non completate; restano da provare sul servizio reale.
+
+## Preparazione alla pubblicazione — 19 ottobre 2026
+
+36 test passati dopo la migrazione 005: nuovo test con tutte le migrazioni in ordine e verifica privacy delle vecchie foto/snapshot tra due utenti, anonimo, admin AAL1/AAL2. Verificati font remoti assenti e accesso UI pubblico disattivato di default. Check sintattico/traduzioni e build passati. Controllo automatico dei sorgenti per formati riconosciuti di chiavi private, token GitHub e JWT service role senza rilevamenti. Non equivale a penetration test o verifica assoluta di assenza di segreti. Account Cloudflare/Supabase ancora da creare, nessun URL pubblico confermato, nessun collaudo sul backend reale. Stato e ostacoli: LAUNCH-2026-10-19.md.

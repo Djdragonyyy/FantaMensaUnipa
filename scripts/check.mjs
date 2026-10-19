@@ -6,3 +6,4 @@ const {messages}=await import('../src/i18n.js');
 if(JSON.stringify(Object.keys(messages.it).sort())!==JSON.stringify(Object.keys(messages.en).sort()))throw new Error('Translation keys differ');
 for(const f of [...walk('src'),...walk('public')].filter(f=>!f.startsWith('public/ocr/')&&!/\.(wasm|gz)$/.test(f)))if(/service_role|SUPABASE_SERVICE_ROLE_KEY/.test(readFileSync(f,'utf8')))throw new Error('Privileged credential reference in frontend');
 console.log('Syntax, translation parity, frontend secret separation: OK');
+execFileSync(process.execPath,['scripts/check-secrets.mjs'],{stdio:'inherit'});

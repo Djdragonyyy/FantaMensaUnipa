@@ -79,3 +79,7 @@ Quote iniziali modificabili dal creatore: piatti ×2,5; permesso ×1,5; sgombera
 Dopo la chiusura il creatore conferma i quattro eventi comuni e, separatamente, i partecipanti a cui è stato chiesto il formaggio. Le caselle non selezionate significano evento non avvenuto; è richiesta una conferma esplicita prima di salvare. Gli esiti sono correggibili con audit e controllo della revisione; i punti vengono ricalcolati senza sommare due volte. Ogni membro vede solo il proprio riepilogo punti; la classifica continua a essere WIP riservata agli admin e non incorpora ancora questi punti eventi.
 
 La simulazione locale supporta lo stesso flusso: giocare prima della chiusura simulata, poi usare Profilo → Simula chiusura delle 13:30 e confermare gli eventi dal gruppo. Applicare anche la migrazione **004_canteen_events.sql** prima di distribuire il frontend aggiornato su Supabase reale.
+
+## Preparazione alla prima pubblicazione
+
+Vedi [stato e primo passo](docs/LAUNCH-2026-10-19.md). Il sito multiutente parte con accesso UI chiuso (`VITE_PUBLIC_ACCESS_ENABLED=false`); disattivare anche le registrazioni nel dashboard Supabase fino alla revisione finale. Applicare tutte le migrazioni, inclusa 005. Font Google rimossi; prove legacy riservate al proprietario e agli admin MFA; snapshot senza prove di altri utenti. Titolare e contatto privacy forniti dall’autore sono nella pagina pubblica di stato e nella [bozza da finalizzare](docs/PRIVACY-DRAFT.md). Queste misure non equivalgono a conformità certificata o pubblicazione completata.

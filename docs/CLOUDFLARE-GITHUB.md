@@ -9,19 +9,19 @@ La copia completa e i commit sono nel repository locale in outputs/FantaMensaUni
 Puoi usare GitHub Desktop, autenticato personalmente con l'account che ha accesso al repository:
 
 1. File → Add local repository; seleziona la cartella FantaMensaUnipa in outputs.
-2. Controlla i commit e il remoto origin.
-3. Push origin. Le credenziali restano in GitHub Desktop/Git Credential Manager; non occorre il connettore GitHub di ChatGPT.
+2. Controlla i commit e scegli il remoto djdragonyyy (la repo Djdragonyyy/FantaMensaUnipa).
+3. Esegui il push verso la repo Djdragonyyy/FantaMensaUnipa. Le credenziali restano in GitHub Desktop/Git Credential Manager; non occorre il connettore GitHub di ChatGPT.
 
-In alternativa, dopo autenticazione locale sicura: `git push origin main` dalla cartella del progetto. Non forzare il push. Se il remoto è cambiato, integra prima i nuovi commit.
+In alternativa, dopo autenticazione locale sicura: `git push djdragonyyy main` dalla cartella del progetto. Non forzare il push. Se il remoto è cambiato, integra prima i nuovi commit.
 
 ## Collegare Cloudflare Pages
 
 1. Accedi personalmente a Cloudflare, piano Free.
 2. Workers & Pages → Create application → Pages → Connect to Git.
 3. Autorizza Cloudflare Workers & Pages su GitHub. Usa **Only select repositories** e scegli soltanto `FantaMensaUnipa`.
-4. Seleziona repository `albertofiocco24-star/FantaMensaUnipa`, branch di produzione `main`.
+4. Seleziona repository `Djdragonyyy/FantaMensaUnipa`, branch di produzione `main`.
 5. Preset: None; build command: `pnpm build`; output directory: `dist`; root: vuota (radice del repository).
-6. Variabile `NODE_VERSION=24`. Per il gioco reale aggiungi le variabili pubbliche `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` e l'eventuale site key CAPTCHA; mai service role o secret OAuth.
+6. Variabile `NODE_VERSION=24` e `PNPM_VERSION=11.25.0`. Per il gioco reale aggiungi le variabili pubbliche `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` e l'eventuale site key CAPTCHA; mai service role o secret OAuth.
 7. Save and Deploy. Usa l'HTTPS gratuito `nome.pages.dev`.
 
 I push successivi su main aggiornano il sito automaticamente. Se hai già creato un progetto con Direct Upload, crea un NUOVO progetto Pages con Git integration: il metodo non si converte sul progetto esistente.
@@ -44,3 +44,5 @@ Fonti ufficiali verificate il 9 ottobre 2026:
 - https://supabase.com/pricing
 - https://supabase.com/docs/guides/auth/auth-smtp
 - https://help.brevo.com/hc/en-us/articles/208589409-About-Brevo-s-pricing-plans
+
+Prima di aprire al pubblico completare i blocchi in LAUNCH-2026-10-19.md. Gli account provider non sono ancora configurati, l’informativa completa è in bozza e le procedure sui dati devono essere collaudate.
